@@ -8,6 +8,8 @@
 library(palmerpenguins)
 library(tidyverse)
 library(praise)
+library(beyonce)
+library(here)
 
 ## load data ##
 glimpse(penguins)
@@ -22,8 +24,15 @@ ggplot(data=penguins,
   geom_smooth(method = "lm") + #aids the eye in seeing patterns in the presence of overplotting, fit linear model
   labs(x = "Bill depth (mm)", 
        y = "Bill length (mm)") +
-  scale_color_viridis_d() +
-  coord_flip()
+  coord_flip() + #flip coordinates
+  scale_color_manual(values = beyonce_palette(72)) + #specify color palette w beyonce library
+  theme_minimal() +  #change theme
+  theme(axis.title = element_text(size = 20), #change size of axis titles
+        panel.background = element_rect(fill = "grey")) #change panel background to grey
+
+ggsave(here("Week_03","Output","penguin.png"),
+       width = 7, height = 5) # in inches
+
 
 praise() #need some external validation
 
