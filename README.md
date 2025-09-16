@@ -1,4 +1,4 @@
-## **Ally Malilay - Repository**
+## Ally Malilay - Repository
 
 #### This repository is the central location for Ally Malilay's coursework in _MBIO 612 - Data Science Fundamentals in R_. 
 #### There are unique folders from each week of the course which contain data, scripts, and outputs.
