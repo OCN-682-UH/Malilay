@@ -6,10 +6,10 @@
 
 ### Repository Contents
 * #### [Week_02](https://github.com/OCN-682-UH/Malilay/tree/main/Week_02) 
-  * #### Week02_script.R: First script to import, read, and analyze data
-  * #### weightdata.csv: data on treatment and weight for each sample
+  * #### _Week02_script.R_: First script to import, read, and analyze data
+  * #### _weightdata.csv_: data on treatment and weight for each sample
 * #### [Week_03](https://github.com/OCN-682-UH/Malilay/tree/main/Week_03)
-  * #### Week03_Assignment.R: Best possible plot with penguin data in 1 hour
-  * #### Week03_script.R: Test script from class with penguin data
-  * #### Week03b_lecturescript.R: Interactive script from online lecture
-  * #### Density estimation of penguin bill and flipper length.png: Assignment plot using geom_density_2d()
+  * #### _Week03_Assignment.R_: Best possible plot with penguin data in 1 hour
+  * #### _Week03_script.R_: Test script from class with penguin data
+  * #### _Week03b_lecturescript.R_: Interactive script from online lecture
+  * #### _Density estimation of penguin bill and flipper length.png_: Assignment plot using geom_density_2d()
