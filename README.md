@@ -13,3 +13,4 @@
   * #### _Week03_script.R_: Test script from class with penguin data
   * #### _Week03b_lecturescript.R_: Interactive script from online lecture
   * #### _Density estimation of penguin bill and flipper length.png_: Assignment plot using geom_density_2d()
+  * #### _penguin.png_: Plot produced from online lecture using penguin data and smoothed conditional means
