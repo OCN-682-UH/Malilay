@@ -44,7 +44,7 @@ CondDepthDataPlot <- CondDepthData_longer %>% #pipe long data for plotting
   guides(fill="none") + #remove automatically generated legend
   scale_color_manual(labels = c("Average Salinity (PSU)", "Average Temperature (ºC)"), #generate new legend with proper title names
                      values = c("red","blue")) + #change color of legend
-  xlim(28.4,35) + #set limits for x axis to make data clear
+  xlim(28.4,35) #set limits for x axis to make data clear
 
 CondDepthDataPlot
 # Export plot
