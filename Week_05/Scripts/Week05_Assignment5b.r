@@ -1,4 +1,4 @@
-### Today we are going to practice joins with data from Becker and Silbiger (2020) ####
+### Create a plot using conductivity and depth data and use lubridate ####
 ### Created by: Ally Malilay #############
 ### Updated on: 2025-09-27 ####################
 #############################################
