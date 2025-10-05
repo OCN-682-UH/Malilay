@@ -1,0 +1,60 @@
+---
+title: "My quarto part 2"
+author: "Ally Malilay"
+format: gfm
+prefer-html: true
+knitr: 
+  opts_chunk: 
+    fig.path: "../Output/"
+---
+
+# Introduction
+Today, we are learning about how to work with figures.
+
+# Load the libraries
+```{r}
+#| message: false
+#| warning: false
+
+library(here)
+library(tidyverse)
+library(palmerpenguins)
+library(kableExtra)
+
+```
+
+# Make a plot
+```{r}
+#| warning: false
+#| out-width: "70%"
+#| fig-align: "center"
+#| label: fig-penguin
+#| fig-cap: "This is a figure showing the flipper length by body mass"
+penguins %>%
+  ggplot(aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  geom_point()
+```
+
+When you look at @fig-penguin, we can see there is a positive relationship between flipper length and body mass.
+
+| Time  | Session | Topic    |
+|:------|:-------:|---------:|
+| _left_ | _center_| _right_ |
+| 01:00  | 1       | Anatomy |
+| 01:50  |         | *Break* |
+| 02:00  | 2       | Tables  |
+| 02:45  |         | *Break* |
+
+```{r}
+#| label: tbl-penguin
+#| tbl-cap: "My awesome penguin table"
+penguins %>%
+  group_by(species) %>%
+  summarise(flipperlengthmean = mean(flipper_length_mm, na.rm = TRUE)) %>%
+  kbl() %>% #add kable table
+kable_classic() %>% #add theme
+row_spec(2, bold = TRUE, color = "black", background = "pink") %>% #edit appearance of row 2
+kable_styling(full_width = FALSE)
+```
+
+@tbl-penguin contains information on the average flipper length of the three penguin species.
