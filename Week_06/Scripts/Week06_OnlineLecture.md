@@ -4,9 +4,9 @@ Ally Malilay
 <script src="Week06_OnlineLecture_files/libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="Week06_OnlineLecture_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
-# Introduction
-
-Today, we are learning about how to work with figures.
+\#question: why doesn’t my table appear on Quarto document as it shows
+in the qmd? I might have a problem with knitr: \# Introduction Today, we
+are learning about how to work with figures.
 
 # Load the libraries
 

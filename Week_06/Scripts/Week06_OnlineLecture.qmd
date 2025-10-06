@@ -7,7 +7,8 @@ knitr:
   opts_chunk: 
     fig.path: "../Output/"
 ---
-
+#question: why doesn't my table appear on Quarto document as it shows in the qmd? 
+I might have a problem with knitr:
 # Introduction
 Today, we are learning about how to work with figures.
 
