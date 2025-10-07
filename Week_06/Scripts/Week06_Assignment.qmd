@@ -4,8 +4,6 @@ author: "Ally Malilay"
 date: "2025-10-7"
 format: html
 theme: united
-fig-width: 10  
-fig-height: 5 
 mainfont: "Arial, sans-serif"
 ---
 
@@ -122,3 +120,4 @@ row_spec(1, bold = TRUE, color = "white", background = "blue") %>% #color in cor
 
 # Conclusion
 The median salinity values from site BP are slightly higher than site W, which we can see from @tbl-salinityBP and @tbl-salinityW. Lower concentrations of salinity are concentrated closer to each other at Site W sampling coordinates as seen in @fig-salinity.
+
