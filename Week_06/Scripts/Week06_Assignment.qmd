@@ -1,46 +1,124 @@
 ---
-title: "Week06_Assignment"
+title: "Week 6 Assignment"
 author: "Ally Malilay"
+date: "2025-10-7"
 format: html
+theme: united
+fig-width: 10  
+fig-height: 5 
+mainfont: "Arial, sans-serif"
 ---
 
-## Introduction
-Let's take a closer look at the *Chemical Data* from *Mauna Lua*!
+# Introduction
+Let's take a closer look at the **Chemical Data** from **Mauna Lua** as collected by Dr. Nyssa Silbiger!
 
-# Load libraries and data
+## Load libraries and data
 
 ```{r}
-#load libraries
 #| message: false
+#| warning: false
 
 library(tidyverse)
 library(here)
 library(kableExtra)
+library(dplyr)
 
 ## Load data ######
 ChemData <- read_csv(here("Week_06", "Data", "chemicaldata_maunalua.csv"))
 ```
 
 ## Data analysis
-In different seasons and tides, what is the difference between average values for salinity, phosphate, and silicate? 
+Separate the tide and time column to create plot based on high tide.
 
 ```{r}
-ChemData_clean <- ChemData %>% #pipe in dataset to clean
+ChemData_clean1 <- ChemData %>% #pipe in dataset to clean
   drop_na() %>% #drop all NAs
   separate(col = Tide_time, #choose tide_time column
            into = c("Tide", "Time"), 
            sep = "_", #separate by _
-           remove = FALSE) %>% #keep Tide_Time column 
-  pivot_longer(cols = Temp_in:percent_sgd, #choose columns to pivot 
-               names_to = "Variables", 
-               values_to = "Values") %>% #name of new column holding variable values
-  group_by(`Variables`, Tide, Season) %>% #group by everything we want
-  summarise(Param_means = mean(Values, na.rm = TRUE))
+           remove = FALSE) %>%
+  rename(Latitude = Lat, #change names of lat and long so x and y axis in plot output are clear
+         Longitude = Long)
 ```
 
 ## Make a plot
+
 ```{r}
-ggplot(ChemData_clean, aes(x= Season, y = Values)) +
-  geom_crossbar() 
+#| label: fig-salinity
+#| fig-cap: "This is a figure showing the salinity (ppt) at two different sites in Mauna Lua at sampling coordinates during high tide"
+
+ggplot(ChemData_clean1 %>% #pipe dataset in
+         filter(Tide == "High"), #filter based on tide since coordinates are distributed due to tide
+       aes(x = Latitude, y = Longitude)) + #layout axes for map-like distribution
+  geom_point(aes(color = Salinity)) + #choose colors based on salinity
+  facet_wrap(~Site, scales = "free") + #separate based on site
+   scale_colour_gradientn(
+    colours = c("blue", "purple", "pink")) + #change color gradient 
+  theme_grey() + #choose theme 
+  theme(axis.title.x = element_text(size = 12), #make font size larger
+        axis.title.y = element_text(size = 12))
+```
+When you look @fig-salinity, you can see the coordinates where samples were taken to measure salinity. 
+
+## Data analysis pt 2
+We will analyze the minimum, median, and maximum salinity values for sites BP and W.
+```{r}
+#Analyze the minimum and maximum Salinity
+ChemData_SalinityW <- ChemData_clean1 %>% 
+  filter(Tide == "High",
+         Site == "W") 
+max(ChemData_SalinityW$Salinity)
+median(ChemData_SalinityW$Salinity)
+min(ChemData_SalinityW$Salinity)
+
+ChemData_SalinityBP <- ChemData_clean1 %>% 
+  filter(Tide == "High",
+         Site == "BP") 
+max(ChemData_SalinityBP$Salinity)
+median(ChemData_SalinityBP$Salinity)
+min(ChemData_SalinityBP$Salinity)
 ```
 
+## Tables 
+Let's take a look at the coordinates of our highest, lowest, and middle values of salinity for sites BP and W. 
+```{r}
+#| label: tbl-salinityW
+#| tbl-cap: "Locations of the maximum and minimum salinity at site W during high tide"
+
+ChemData_clean1 %>%
+  filter(Tide == "High",
+         Site == "W",
+         near(Salinity, 33.7367, tol = 0.001) | #use the or function to include min/med/max salinity
+           near(Salinity, 34.54317, tol = 0.001) |
+         near(Salinity, 34.6214, tol = 0.001)) %>%
+  arrange(Salinity) %>%
+  select(Latitude, Longitude, Salinity) %>%
+  kbl() %>%
+  row_spec(1, bold = TRUE, color = "white", background = "blue") %>% #color in correspondence w plot
+  row_spec(3, bold = TRUE, color = "black", background = "pink") %>% #color in correspondce w plot
+  kable_styling(full_width = FALSE)
+```
+
+
+
+```{r}
+#| label: tbl-salinityBP
+#| tbl-cap: "Locations of the maximum and minimum salinity at site BP during high tide"
+
+ChemData_clean1 %>%
+  filter(Tide == "High",
+         Site == "BP",
+         near(Salinity, 33.23476, tol = 0.001) | #use the or function to include min/max salinity
+           near(Salinity, 34.58473, tol = 0.001) |
+         near(Salinity, 34.65106, tol = 0.001)) %>%
+  arrange(Salinity) %>%
+  select(Latitude, Longitude, Salinity) %>%
+  kbl() %>%
+  kable_classic() %>% #add theme
+row_spec(1, bold = TRUE, color = "white", background = "blue") %>% #color in correspondence w plot
+  row_spec(4, bold = TRUE, color = "black", background = "pink") %>% #color in correspondce w plot
+  kable_styling(full_width = FALSE)
+```
+
+# Conclusion
+The median salinity values from site BP are slightly higher than site W, which we can see from @tbl-salinityBP and @tbl-salinityW. Lower concentrations of salinity are concentrated closer to each other at Site W sampling coordinates as seen in @fig-salinity.

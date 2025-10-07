@@ -107,10 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
-<p>Today, we are learning about how to work with figures.</p>
-</section>
+<p>#question: why doesn’t my table appear on Quarto document as it shows in the qmd? I might have a problem with knitr: # Introduction Today, we are learning about how to work with figures.</p>
 <section id="load-the-libraries" class="level1">
 <h1>Load the libraries</h1>
 <div class="cell">
@@ -130,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="fig-penguin" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-penguin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="Week06_OnlineLecture_files/figure-html/fig-penguin-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%">
+<img src="../Output/fig-penguin-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-penguin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: This is a figure showing the flipper length by body mass
@@ -176,7 +173,7 @@ Figure&nbsp;1: This is a figure showing the flipper length by body mass
 </tr>
 </tbody>
 </table>
-<div class="cell">
+<div class="cell" data-attr.table="“data-quarto-disable-processing=true”">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">flipperlengthmean =</span> <span class="fu">mean</span>(flipper_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
@@ -184,7 +181,7 @@ Figure&nbsp;1: This is a figure showing the flipper length by body mass
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_classic</span>() <span class="sc">%&gt;%</span> <span class="co">#add theme</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">row_spec</span>(<span class="dv">2</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">background =</span> <span class="st">"pink"</span>) <span class="sc">%&gt;%</span> <span class="co">#edit appearance of row 2</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="tbl-penguin" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<div id="tbl-penguin" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-attr.table="“data-quarto-disable-processing=true”">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-penguin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;1: My awesome penguin table

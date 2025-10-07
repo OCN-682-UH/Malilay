@@ -1,8 +1,7 @@
 ---
 title: "My quarto part 2"
 author: "Ally Malilay"
-format: gfm
-prefer-html: true
+format: html
 knitr: 
   opts_chunk: 
     fig.path: "../Output/"
@@ -49,6 +48,7 @@ When you look at @fig-penguin, we can see there is a positive relationship betwe
 ```{r}
 #| label: tbl-penguin
 #| tbl-cap: "My awesome penguin table"
+#| attr.table: “data-quarto-disable-processing=true”
 penguins %>%
   group_by(species) %>%
   summarise(flipperlengthmean = mean(flipper_length_mm, na.rm = TRUE)) %>%
