@@ -35,36 +35,38 @@ coral <- read_csv(here("Week_10","Data","coral_reef_sites.csv"))
 Let's make a function that filters data based on the marine protection status of our sites and the minimum/maximum coral coverage.
 ```{r}
 filterby_mpa_coral <- function(data, mpa_status, coralcov_min, coralcov_max) { #name the function and arguments
-  filtered_data <- data %>%
+  filtered_data <- data %>% #data to be filtered
     filter(marine_protection_status == mpa_status, #filter based on mpa_status (MPA or unprotected)
            coral_cover >= coralcov_min, #choose the minimum value for coral cover
            coral_cover <= coralcov_max) #choose the maximum value for coral cover
   return(filtered_data)
 }
 
+#test our function!
 filterby_mpa_coral(coral, "MPA", coralcov_min = 83, coralcov_max = 100)
 ```
 Let's try making a function that does not filter the marine protection status.
 
 ```{r}
-filterby_coral <- function(data, coralcov_min, coralcov_max) { #choose
-  filtered_data <- data %>%
-    filter(coral_cover >= coralcov_min,
-           coral_cover <= coralcov_max)
+filterby_coral <- function(data, coralcov_min, coralcov_max) { #name the function and arguments
+  filtered_data <- data %>% #data to be filtered
+    filter(coral_cover >= coralcov_min, #minimum coral cover
+           coral_cover <= coralcov_max) #maximum coral cover
   return(filtered_data)
 }
 
+#test our function!
 filterby_coral(coral, coralcov_min = 83, coralcov_max = 100)
 ```
 
 # Plot
 Make a plot to show how to the percent coral cover varies based on light availability and protection status. Let's use one of our new functions!
 ```{r}
-structuralcomplexityplot <- function(data, coralcov_min, coralcov_max) {
-  filtered_data <- filterby_coral(data = data, 
+structuralcomplexityplot <- function(data, coralcov_min, coralcov_max) { #name the argument
+  filtered_data <- filterby_coral(data = data, #use our function to add in filter on min and max coral coverage we choose to plot
                                   coralcov_min = coralcov_min, 
                                   coralcov_max = coralcov_max) %>%
-    mutate(light_availability = factor(light_availability, levels = c("Low", "Medium", "High")))
+    mutate(light_availability = factor(light_availability, levels = c("Low", "Medium", "High"))) #categorical data - make light_availability a factor and choose levels
   plot <- ggplot(filtered_data, aes(x = light_availability, y = coral_cover, 
                                     color = marine_protection_status)) +
     geom_boxplot() +
@@ -78,6 +80,7 @@ structuralcomplexityplot <- function(data, coralcov_min, coralcov_max) {
   return(plot)
 }
 
+#Let's test!
  structuralcomplexityplot(data = coral, coralcov_min = 60, coralcov_max = 90)
 ```
 
