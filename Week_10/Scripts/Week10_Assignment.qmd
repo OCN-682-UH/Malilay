@@ -1,0 +1,83 @@
+---
+title: "Week 10 Assignment"
+format: html
+toc: true
+author: "Ally Malilay"
+date: "2025-11-4"
+theme: united
+mainfont: "Arial, sans-serif"
+---
+# Introduction
+Let's check out data on *Coral Species Presence in Synthetic Reef Sites*. [This dataset](https://www.kaggle.com/datasets/petermoorhouse/coral-reef-sites/data) contains 10,000 observations of synthetic reef sites, denoting the presence of various coral species at the sites. We will use functions to answer the following questions:
+
+- How do we filter data specific to the coral coverage and marine protection status?
+- When we choose specific values for the minimum and maximum coral coverage, what is the repeated pattern over differing light availability and marine protection status?
+
+# Set Up Libraries
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(here)
+library(ggthemes)
+```
+
+# Load data
+```{r}
+#| message: false
+#| warning: false
+#coral data
+coral <- read_csv(here("Week_10","Data","coral_reef_sites.csv"))
+```
+
+# No Plot
+Let's make a function that filters data based on the marine protection status of our sites and the minimum/maximum coral coverage.
+```{r}
+filterby_mpa_coral <- function(data, mpa_status, coralcov_min, coralcov_max) { #name the function and arguments
+  filtered_data <- data %>%
+    filter(marine_protection_status == mpa_status, #filter based on mpa_status (MPA or unprotected)
+           coral_cover >= coralcov_min, #choose the minimum value for coral cover
+           coral_cover <= coralcov_max) #choose the maximum value for coral cover
+  return(filtered_data)
+}
+
+filterby_mpa_coral(coral, "MPA", coralcov_min = 83, coralcov_max = 100)
+```
+Let's try making a function that does not filter the marine protection status.
+
+```{r}
+filterby_coral <- function(data, coralcov_min, coralcov_max) { #choose
+  filtered_data <- data %>%
+    filter(coral_cover >= coralcov_min,
+           coral_cover <= coralcov_max)
+  return(filtered_data)
+}
+
+filterby_coral(coral, coralcov_min = 83, coralcov_max = 100)
+```
+
+# Plot
+Make a plot to show how to the percent coral cover varies based on light availability and protection status. Let's use one of our new functions!
+```{r}
+structuralcomplexityplot <- function(data, coralcov_min, coralcov_max) {
+  filtered_data <- filterby_coral(data = data, 
+                                  coralcov_min = coralcov_min, 
+                                  coralcov_max = coralcov_max) %>%
+    mutate(light_availability = factor(light_availability, levels = c("Low", "Medium", "High")))
+  plot <- ggplot(filtered_data, aes(x = light_availability, y = coral_cover, 
+                                    color = marine_protection_status)) +
+    geom_boxplot() +
+     labs(title = "Coral Cover in Varied Light Availability by Protection Status",   
+       x = "Light Availability",
+       y= "Coral Cover (%)") +
+  theme_bw() + #change theme 
+  theme(axis.title = element_text(face = "plain"), #adjust axis and legend titles to plain
+        legend.title = element_text(face = "plain"), 
+        title = element_text(size = 14, face = "bold"))
+  return(plot)
+}
+
+ structuralcomplexityplot(data = coral, coralcov_min = 60, coralcov_max = 90)
+```
+
