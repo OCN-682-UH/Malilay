@@ -76,11 +76,15 @@ structuralcomplexityplot <- function(data, coralcov_min, coralcov_max) { #name t
   theme_bw() + #change theme 
   theme(axis.title = element_text(face = "plain"), #adjust axis and legend titles to plain
         legend.title = element_text(face = "plain"), 
-        title = element_text(size = 14, face = "bold"))
+        title = element_text(size = 13, face = "bold"))
   return(plot)
 }
 
 #Let's test!
- structuralcomplexityplot(data = coral, coralcov_min = 60, coralcov_max = 90)
+ structuralcomplexityplot(data = coral, coralcov_min = 70, coralcov_max = 90)
+```
+Take a look across the entire range of coral cover values
+```{r}
+structuralcomplexityplot(data = coral, coralcov_min = 0, coralcov_max = 100)
 ```
 
