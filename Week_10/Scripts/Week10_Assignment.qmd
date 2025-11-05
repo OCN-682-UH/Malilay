@@ -59,6 +59,23 @@ filterby_coral <- function(data, coralcov_min, coralcov_max) { #name the functio
 filterby_coral(coral, coralcov_min = 83, coralcov_max = 100)
 ```
 
+```{r}
+mpastatus_to_coralcover <- function(data, mpa_status) { #name the function and arguments
+  if (mpa_status == "MPA") { #if then logic if mpa status is an MPA
+    meanvalue <- data %>% #assign mean value
+      group_by(region) %>% #group by the four regions
+      summarise(meanval = mean(coral_cover, na.rm = TRUE)) #get mean value of coral cover across region
+  } else { #when mpa status is NOT MPA (which means it is unprotected)
+    meanvalue <- data %>% #assign mean value and pipe data
+      group_by(region) %>%
+      summarise(meanval = mean(algal_cover, na.rm = TRUE)) #algal cover if NOT MPA
+  }
+  return(meanvalue) #output is mean value of coral cover or algal cover
+}
+#Test
+mpastatus_to_coralcover(data = coral, mpa_status = "Unprotected")
+```
+
 # Plot
 Make a plot to show how to the percent coral cover varies based on light availability and protection status. Let's use one of our new functions!
 ```{r}
