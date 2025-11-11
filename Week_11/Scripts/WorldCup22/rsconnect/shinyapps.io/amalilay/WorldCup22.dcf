@@ -1,0 +1,12 @@
+name: WorldCup22
+title: WorldCup22
+username: amalilay
+account: amalilay
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16027756
+bundleId: 11163541
+url: https://amalilay.shinyapps.io/WorldCup22/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
