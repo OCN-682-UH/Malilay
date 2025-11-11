@@ -1,6 +1,11 @@
 ---
 title: "Tidy Tuesday Assignment 1"
 format: html
+toc: true
+author: "Ally Malilay"
+date: "2025-11-11"
+theme: united
+mainfont: "Arial, sans-serif"
 ---
 
 # Load our libraries & data
@@ -10,6 +15,7 @@ library(tidytuesdayR)
 library(ggplot2)
 library(tidyr)
 library(dplyr)
+library(here)
 #Load data
 tuesdata <- tidytuesdayR::tt_load(2025, week = 44)
 flint_mdeq <- tuesdata$flint_mdeq
@@ -17,7 +23,6 @@ flint_vt <- tuesdata$flint_vt
 ```
 
 # Tidy up the data
-
 ```{r}
 mdeq_long <- flint_mdeq %>% 
   select(sample, lead) %>% #use column with sample removed due to filter presence/business status
@@ -33,7 +38,7 @@ flintdata <- bind_rows(mdeq_long, vt_cleaned) #combine datasets
 ```
 
 # Plot
-This is my first time plotting using a histogram.
+This is my first time plotting using a histogram! Woohoo to learning new things.
 ```{r}
 flintvtplot <- ggplot(flintdata, aes(x = lead)) + 
   geom_histogram(binwidth = 6, color = "black") + #add geometry
@@ -44,6 +49,6 @@ flintvtplot <- ggplot(flintdata, aes(x = lead)) +
   facet_wrap(~data) #separate plots by research project
 
 flintvtplot
-ggsave(here("2025-11-04","Output","LeadLevelsDistribution.png"))
+ggsave(here("Tidy_Tuesday","2025-11-04","Output","LeadLevelsDistribution.png"))
 ```
 
