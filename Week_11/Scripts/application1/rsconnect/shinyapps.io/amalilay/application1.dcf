@@ -1,0 +1,12 @@
+name: application1
+title: application1
+username: amalilay
+account: amalilay
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 15968535
+bundleId: 11132295
+url: https://amalilay.shinyapps.io/application1/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
