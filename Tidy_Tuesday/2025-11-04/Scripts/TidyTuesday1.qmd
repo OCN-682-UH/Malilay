@@ -10,6 +10,8 @@ mainfont: "Arial, sans-serif"
 
 # Load our libraries & data
 ```{r}
+#| message: false
+#| warning: false
 #Libraries
 library(tidytuesdayR)
 library(ggplot2)
@@ -40,6 +42,8 @@ flintdata <- bind_rows(mdeq_long, vt_cleaned) #combine datasets
 # Plot
 This is my first time plotting using a histogram! Woohoo to learning new things.
 ```{r}
+#| message: false
+#| warning: false
 flintvtplot <- ggplot(flintdata, aes(x = lead)) + 
   geom_histogram(binwidth = 6, color = "black") + #add geometry
   labs(title = "Distribution of lead levels in Flint, MI", #titles for axes
