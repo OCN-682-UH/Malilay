@@ -1,0 +1,52 @@
+---
+title: "Tidy Tuesday Assignment 2"
+format: html
+toc: true
+author: "Ally Malilay"
+date: "2025-11-18"
+theme: united
+mainfont: "Arial, sans-serif"
+---
+# Load our libraries and data
+```{r}
+#|message: false
+#|warning: false
+
+library(tidytuesdayR)
+library(ggplot2)
+library(here)
+library(gganimate)
+library(tidyr)
+library(tidyverse)
+
+#Load data
+tuesdata <- tidytuesdayR::tt_load(2025, week = 45)
+who_tb_data <- tuesdata$who_tb_data
+```
+# Tidy up the data 
+```{r}
+tb_westernpacific <- who_tb_data %>%
+  filter(country %in% c("Guam", "Micronesia (Federated States of)", "Marshall Islands", "Palau", "Northern Mariana Islands", "Kiribati")) %>% #let's look at tb cases in Micronesia
+  drop_na() #drop nas
+```
+
+# Make a plot!
+This is my first time using gganimate. I wanted to show the variation of TB incident vs mortality cases over the years based on island nations in Micronesia.
+```{r}
+TBMicronesiaplot <- ggplot(tb_westernpacific, aes(x = e_inc_num, y = e_mort_num,
+                                      color = country)) +
+  geom_point() + #add geometry
+ labs(x = "Estimated # of Incident Cases",
+      y = "Estimated # of Mortalities from TB",
+      title = "Tuberculosis Cases in Micronesia: Estimated Incidences vs Mortalities") +
+  guides(color = guide_legend(title = "Island Nation")) +
+  transition_time(year) + #animate based on year
+  geom_text(aes(x = 600, y = 0.15, label = paste0("Year: ", round(year))), #text in bottom right corner
+    size = 7, #text size
+    color = "grey60") + #color of years
+   ease_aes('cubic-in-out') #make transition between years slower for easier visual observation
+TBMicronesiaplot
+anim_save(here("Tidy_Tuesday","2025-11-11","Output","TBMicronesialplot.gif"))
+```
+
+
