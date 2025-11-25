@@ -1,0 +1,78 @@
+---
+title: "Week 13 Assignment"
+format: html
+toc: true
+author: "Ally Malilay"
+date: "2025-11-24"
+theme: united
+mainfont: "Arial, sans-serif"
+---
+
+# Load libraries 
+The goal for this assignment is to bring in all 4 files and calculate the mean and standard deviation of both temperature (Temp.C) and light (Intensity.lux) for each tide pool. Let's load our libraries to begin!
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(here)
+```
+
+
+# For loops
+```{r}
+#| message: false
+#| warning: false
+
+HWPath<-here("Week_13", "data", "homework") #location of our files 
+files <- dir(path = HWPath,pattern = ".csv") #files in the path with a specific pattern
+
+templight_data<-tibble(filename =  rep(NA, length(files)),  # column name for data
+                  mean_temp = rep(NA, length(files)), # column name for the mean temperature
+                  sd_temp = rep(NA, length(files)), #column name sd temp
+                  mean_light = rep(NA, length(files)), # column name for the mean light
+                  sd_light = rep(NA, length(files)) #column name for sd light
+)
+
+raw_data <- read_csv(paste0(HWPath,"/",files[1])) # test by reading in the first file and see if it works
+raw_data<-read_csv(paste0(HWPath,"/",files[1]))
+
+#test the code outside of the for loop, make sure it runs before you put it in
+mean_temp <- mean(raw_data$Temp.C, na.rm = TRUE) # calculate a mean
+
+
+for (i in 1:length(files)){ # loop over 1:4 the number of files 
+  raw_data<-read_csv(paste0(HWPath,"/",files[i]))
+}
+
+for (i in 1:length(files)){ # loop over the number of files 
+  raw_data<-read_csv(paste0(HWPath,"/",files[i]))
+  templight_data$filename[i]<-files[i]
+  templight_data$mean_temp[i]<-mean(raw_data$Temp.C, na.rm =TRUE)
+  templight_data$sd_temp[i] <- sd(raw_data$Temp.C, na.rm = TRUE)
+  templight_data$mean_light[i]<-mean(raw_data$Intensity.lux, na.rm =TRUE)
+  templight_data$sd_light[i] <- sd(raw_data$Intensity.lux, na.rm = TRUE)
+} 
+
+templight_data
+```
+# Use map instead 
+```{r}
+#| message: false
+#| warning: false
+
+#bring files in using purrr instead of a for loop
+mapfiles <- dir(path = HWPath,pattern = ".csv", full.names = TRUE)
+
+maptl_data <- mapfiles %>%
+  set_names() %>% #set the id of each list to the file name
+  map_df(read_csv,.id = "filename") %>% #map everything to a dataframe and put id in a column named filename
+  group_by(filename) %>%
+  summarise(mean_temp = mean(Temp.C, na.rm = TRUE),
+            sd_temp = sd(Temp.C, na.rm = TRUE),
+            mean_light = mean(Intensity.lux, na.rm = TRUE),
+            sd_light = sd(Intensity.lux, na.rm = TRUE))
+
+maptl_data
+```
+
