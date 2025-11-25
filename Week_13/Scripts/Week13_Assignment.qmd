@@ -48,13 +48,14 @@ for (i in 1:length(files)){ # loop over 1:4 the number of files
 for (i in 1:length(files)){ # loop over the number of files 
   raw_data<-read_csv(paste0(HWPath,"/",files[i]))
   templight_data$filename[i]<-files[i]
-  templight_data$mean_temp[i]<-mean(raw_data$Temp.C, na.rm =TRUE)
-  templight_data$sd_temp[i] <- sd(raw_data$Temp.C, na.rm = TRUE)
+  templight_data$mean_temp[i]<-mean(raw_data$Temp.C, na.rm =TRUE) #calculate mean temp per file
+  templight_data$sd_temp[i] <- sd(raw_data$Temp.C, na.rm = TRUE) #calculate sd temp per file
   templight_data$mean_light[i]<-mean(raw_data$Intensity.lux, na.rm =TRUE)
   templight_data$sd_light[i] <- sd(raw_data$Intensity.lux, na.rm = TRUE)
 } 
 
 templight_data
+write_csv(templight_data, file = "../Output/tidepool_for_loop.csv")
 ```
 # Use map instead 
 ```{r}
@@ -68,11 +69,12 @@ maptl_data <- mapfiles %>%
   set_names() %>% #set the id of each list to the file name
   map_df(read_csv,.id = "filename") %>% #map everything to a dataframe and put id in a column named filename
   group_by(filename) %>%
-  summarise(mean_temp = mean(Temp.C, na.rm = TRUE),
-            sd_temp = sd(Temp.C, na.rm = TRUE),
-            mean_light = mean(Intensity.lux, na.rm = TRUE),
-            sd_light = sd(Intensity.lux, na.rm = TRUE))
+  summarise(mean_temp = mean(Temp.C, na.rm = TRUE), #mean temp
+            sd_temp = sd(Temp.C, na.rm = TRUE), #sd temp
+            mean_light = mean(Intensity.lux, na.rm = TRUE), #calculate mean light
+            sd_light = sd(Intensity.lux, na.rm = TRUE)) #calculate mean sd
 
 maptl_data
+write_csv(maptl_data, file = "../Output/tidepool_map.csv")
 ```
 
