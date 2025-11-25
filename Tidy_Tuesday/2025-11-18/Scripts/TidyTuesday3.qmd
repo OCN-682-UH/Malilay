@@ -30,6 +30,9 @@ holmes <- tuesdata$holmes
 
 # Tidy up the data!
 ```{r}
+#| message: false
+#| warning: false
+
 tidyholmes <- holmes %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2) %>% #create column named bigram with pairs of words from every line (eg. "a study", "study in", "in scarlet", etc.)
   separate(bigram, c("word1", "word2"), sep = " ") %>% #separate bigram into word1 & word2 columns
@@ -47,6 +50,9 @@ glimpse(tidyholmes) #take a look at the tidied data!
 # Let's make a word network plot!
 This is the first time I'm using a word network plot. This will show us the relationship between the character Holmes and actions that he undertakes in all of the books.
 ```{r}
+#| message: false
+#| warning: false
+
 ggraph(tidyholmes, 
        layout = "fr") + #fr spreads out the points and lines on the graph
   geom_edge_link(aes(alpha = Occurrences, width = Occurrences), #this geometry will add the edges/lines to connect word1 to word2
@@ -60,6 +66,6 @@ ggraph(tidyholmes,
   labs(title = "Most common actions carried out by Holmes",
        caption = "Data: {sherlock} R package by Emil Hvitfeldt. This dataset includes the full collection of Holmes texts.") +
   theme(plot.title = element_text(hjust = 0.5)) #adjust title text to halfway point 
-
+ggsave(here("Tidy_Tuesday","2025-11-18","Output","CommonActionsHolmes.png"))
 ```
 
