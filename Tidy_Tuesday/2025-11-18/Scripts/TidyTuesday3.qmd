@@ -1,0 +1,65 @@
+---
+title: "Tidy Tuesday 3"
+format: html
+toc: true
+author: "Ally Malilay"
+date: "2025-11-25"
+theme: united
+mainfont: "Arial, sans-serif"
+---
+
+# Load libraries and data
+```{r}
+#| message: false
+#| warning: false
+#Libraries
+library(tidytuesdayR)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(here)
+library(tidyverse)
+library(tidytext)
+library(widyr)
+library(igraph)
+library(ggraph)
+
+tuesdata <- tidytuesdayR::tt_load(2025, week = 46)
+holmes <- tuesdata$holmes
+```
+
+# Tidy up the data!
+```{r}
+tidyholmes <- holmes %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>% #create column named bigram with pairs of words from every line (eg. "a study", "study in", "in scarlet", etc.)
+  separate(bigram, c("word1", "word2"), sep = " ") %>% #separate bigram into word1 & word2 columns
+        filter(!word1 %in% stop_words$word, #filter out stop words in word1 column
+               !word2 %in% stop_words$word,#filter out stop words in word2 column
+               word1 == "holmes") %>% #filter so all phrases begin with the word holmes from word1
+  count(word1, word2, sort = TRUE) %>% #count the number of occurences
+  drop_na() %>% #drop NAs
+  top_n(15) %>% #choose top 15 occurences
+  rename(Occurrences = n)
+
+glimpse(tidyholmes) #take a look at the tidied data!
+```
+
+# Let's make a word network plot!
+This is the first time I'm using a word network plot. This will show us the relationship between the character Holmes and actions that he undertakes in all of the books.
+```{r}
+ggraph(tidyholmes, 
+       layout = "fr") + #fr spreads out the points and lines on the graph
+  geom_edge_link(aes(alpha = Occurrences, width = Occurrences), #this geometry will add the edges/lines to connect word1 to word2
+                edge_colour = "darkgrey",    #edge/line color
+                arrow = arrow(length = unit(3, 'mm'))) + #arrow length and size
+  geom_node_point(color = "blue", size = 4) + #add nodes for edges to connect to
+  geom_node_text(aes(label = name), #add labels to the nodes 
+                 repel = TRUE, #prevent labels from overlapping
+                 fontface = "bold") + #bold font so word2 is distinct from plot
+  theme_void() + #remove x and y axis
+  labs(title = "Most common actions carried out by Holmes",
+       caption = "Data: {sherlock} R package by Emil Hvitfeldt. This dataset includes the full collection of Holmes texts.") +
+  theme(plot.title = element_text(hjust = 0.5)) #adjust title text to halfway point 
+
+```
+
