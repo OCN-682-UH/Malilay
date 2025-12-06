@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ally Malilay">
+<meta name="dcterms.date" content="2025-12-06">
+
+<title>Tidy Tuesday 4</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="TidyTuesday4_files/libs/clipboard/clipboard.min.js"></script>
+<script src="TidyTuesday4_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="TidyTuesday4_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="TidyTuesday4_files/libs/quarto-html/popper.min.js"></script>
+<script src="TidyTuesday4_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="TidyTuesday4_files/libs/quarto-html/anchor.min.js"></script>
+<link href="TidyTuesday4_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="TidyTuesday4_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="TidyTuesday4_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="TidyTuesday4_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="TidyTuesday4_files/libs/bootstrap/bootstrap-343bfed42823a428e05dd50d4d2b953d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="TidyTuesday4_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="TidyTuesday4_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="TidyTuesday4_files/libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="TidyTuesday4_files/libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="TidyTuesday4_files/libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="TidyTuesday4_files/libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="TidyTuesday4_files/libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="TidyTuesday4_files/libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="TidyTuesday4_files/libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#load-libraries-and-data" id="toc-load-libraries-and-data" class="nav-link active" data-scroll-target="#load-libraries-and-data">Load libraries and data</a></li>
+  <li><a href="#tidy-up-the-data" id="toc-tidy-up-the-data" class="nav-link" data-scroll-target="#tidy-up-the-data">Tidy up the data!</a></li>
+  <li><a href="#our-first-time-making-a-plot-with-bubble-graphs" id="toc-our-first-time-making-a-plot-with-bubble-graphs" class="nav-link" data-scroll-target="#our-first-time-making-a-plot-with-bubble-graphs">Our first time making a plot with bubble graphs</a></li>
+  <li><a href="#make-the-plot-interactive-with-a-new-package" id="toc-make-the-plot-interactive-with-a-new-package" class="nav-link" data-scroll-target="#make-the-plot-interactive-with-a-new-package">Make the plot interactive with a new package!</a></li>
+  <li><a href="#what-we-learned-today" id="toc-what-we-learned-today" class="nav-link" data-scroll-target="#what-we-learned-today">What we learned today</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tidy Tuesday 4</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ally Malilay </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 6, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="load-libraries-and-data" class="level1">
+<h1>Load libraries and data</h1>
+<p>Today we’re looking at data that monitors the statistical performance of countries as develped by the World Bank. The <a href="https://www.worldbank.org/en/programs/statistical-performance-indicators/Framework">SPI Framework</a> focuses on five key dimensions of a country’s statistical performance: (i) data use, (ii) data services, (iii) data products, (iv) data sources, and (v) data infrastructure.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytuesdayR)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(htmlwidgets)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in Tidy Tuesday data</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>spi <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-11-25/spi_indicators.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tidy-up-the-data" class="level1">
+<h1>Tidy up the data!</h1>
+<p>We’re going to take a look at the most recent data from 2023. We want to understand the relationship between the data products score and data infrastructure score.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>spi_cleaned <span class="ot">&lt;-</span> spi <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="st">"2023"</span>) <span class="sc">%&gt;%</span> <span class="co">#most recent year</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>year) <span class="sc">%&gt;%</span> <span class="co">#remove year column from data</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="st">"data_products_score"</span>,<span class="st">"data_infrastructure_score"</span>) <span class="sc">%&gt;%</span> <span class="co">#drop NAs for data we're using</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(income <span class="sc">!=</span> <span class="st">"Not classified"</span>) <span class="sc">%&gt;%</span> <span class="co">#filter for income not equal to not classified</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">income =</span> <span class="fu">factor</span>(income, <span class="co">#factor for legend</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"High income"</span>, <span class="st">"Upper middle income"</span>, <span class="st">"Lower middle income"</span>, <span class="st">"Low income"</span>)),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">pop_group =</span> <span class="fu">cut</span>(population, <span class="co">#factor for population, pop range huge &amp;plotly legends can only handle discrete</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000000</span>, <span class="dv">100000000</span>, <span class="dv">500000000</span>, <span class="dv">1428627663</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Under 1M"</span>, <span class="st">"50M - 100M"</span>, <span class="st">"100M - 500M"</span>, <span class="st">"Over 500M"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>          ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="our-first-time-making-a-plot-with-bubble-graphs" class="level1">
+<h1>Our first time making a plot with bubble graphs</h1>
+<p>Let’s see how the data products and infrastructure scores change based on population size and income. Is there a clear relationship we can identify here?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(spi_cleaned, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> data_products_score, <span class="at">y =</span> data_infrastructure_score,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">size =</span> pop_group, <span class="at">color =</span> income,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">text =</span> <span class="fu">paste</span>(<span class="st">"Country:"</span>, country, <span class="co">#text for interactive plotly</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"&lt;br&gt;Data Products Score:"</span>, data_products_score,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"&lt;br&gt;Data Infrastructure Score:"</span>, data_infrastructure_score,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"&lt;br&gt;Population:"</span>, pop_group))) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="co">#modify color transparency</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">name =</span> <span class="st">"Population Size"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">values =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>, <span class="dv">10</span>,<span class="dv">18</span>)) <span class="sc">+</span>    </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">name =</span> <span class="st">"Income"</span>) <span class="sc">+</span> <span class="co">#legend title</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Data Products Score"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Data Infrastructure Score"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Global Data Infrastructure Score vs Data Products Score in 2023"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"By country, population, and income"</span>) <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>region) </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>plot  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TidyTuesday4_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Tidy_Tuesday"</span>,<span class="st">"2025-11-25"</span>,<span class="st">"Output"</span>,<span class="st">"GlobalDataScores.png"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="make-the-plot-interactive-with-a-new-package" class="level1">
+<h1>Make the plot interactive with a new package!</h1>
+<p>It would be great to see the specific countries we’re taking a look at and their specific data scores.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>GlobalData <span class="ot">&lt;-</span> <span class="fu">ggplotly</span>(plot,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">tooltip =</span> <span class="fu">c</span>(<span class="st">"text"</span>)) <span class="co">#for the popup text</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>GlobalData</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-59cc3b5eaacd669d3c41" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-59cc3b5eaacd669d3c41">{"x":{"data":[{"x":[63.45624999999999,61.843750000000007,59.8125],"y":[50,50,20],"text":["Country: Brunei Darussalam <br>Data Products Score: 63.45625 <br>Data Infrastructure Score: 50 <br>Population: Under 1M","Country: Palau <br>Data Products Score: 61.84375 <br>Data Infrastructure Score: 50 <br>Population: Under 1M","Country: Nauru <br>Data Products Score: 59.8125 <br>Data Infrastructure Score: 20 <br>Population: Under 1M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(Under 1M,High income)","legendgroup":"(Under 1M,High income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[81.137499999999989,79.337499999999991,45.575000000000003,38.143749999999997],"y":[100,100,25,55.000000000000007],"text":["Country: Luxembourg <br>Data Products Score: 81.1375 <br>Data Infrastructure Score: 100 <br>Population: Under 1M","Country: Iceland <br>Data Products Score: 79.3375 <br>Data Infrastructure Score: 100 <br>Population: Under 1M","Country: Andorra <br>Data Products Score: 45.575 <br>Data Infrastructure Score: 25 <br>Population: Under 1M","Country: San Marino <br>Data Products Score: 38.14375 <br>Data Infrastructure Score: 55 <br>Population: Under 1M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(Under 1M,High income)","legendgroup":"(Under 1M,High income)","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[54.92499999999999,71.168750000000003,63.88750000000001,49.299999999999997,45.212499999999991],"y":[70,45,45,75,30],"text":["Country: Barbados <br>Data Products Score: 54.925 <br>Data Infrastructure Score: 70 <br>Population: Under 1M","Country: Guyana <br>Data Products Score: 71.16875 <br>Data Infrastructure Score: 45 <br>Population: Under 1M","Country: Antigua and Barbuda <br>Data Products Score: 63.8875 <br>Data Infrastructure Score: 45 <br>Population: Under 1M","Country: Bahamas, The <br>Data Products Score: 49.3 <br>Data Infrastructure Score: 75 <br>Population: Under 1M","Country: St. Kitts and Nevis <br>Data Products Score: 45.2125 <br>Data Infrastructure Score: 30 <br>Population: Under 1M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(Under 1M,High income)","legendgroup":"(Under 1M,High income)","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[72.837500000000006],"y":[85],"text":"Country: Malta <br>Data Products Score: 72.8375 <br>Data Infrastructure Score: 85 <br>Population: Under 1M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(Under 1M,High income)","legendgroup":"(Under 1M,High income)","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[58.456249999999997],"y":[70],"text":"Country: Seychelles <br>Data Products Score: 58.45625 <br>Data Infrastructure Score: 70 <br>Population: Under 1M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(Under 1M,High income)","legendgroup":"(Under 1M,High income)","showlegend":false,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[71.52500000000002,78.525000000000006,62.318749999999987,62.649999999999991],"y":[45,60,15,20],"text":["Country: Tonga <br>Data Products Score: 71.525 <br>Data Infrastructure Score: 45 <br>Population: Under 1M","Country: Fiji <br>Data Products Score: 78.525 <br>Data Infrastructure Score: 60 <br>Population: Under 1M","Country: Tuvalu <br>Data Products Score: 62.31875 <br>Data Infrastructure Score: 15 <br>Population: Under 1M","Country: Marshall Islands <br>Data Products Score: 62.65 <br>Data Infrastructure Score: 20 <br>Population: Under 1M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(Under 1M,Upper middle income)","legendgroup":"(Under 1M,Upper middle income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[73.362500000000011],"y":[80],"text":"Country: Montenegro <br>Data Products Score: 73.3625 <br>Data Infrastructure Score: 80 <br>Population: Under 1M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(Under 1M,Upper middle income)","legendgroup":"(Under 1M,Upper middle income)","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[68.100000000000009,64.662499999999994,62.662500000000001,56.493750000000006,59.112499999999997,54.062499999999993],"y":[55.000000000000007,55.000000000000007,55.000000000000007,40,40,30],"text":["Country: Belize <br>Data Products Score: 68.1 <br>Data Infrastructure Score: 55 <br>Population: Under 1M","Country: St. Lucia <br>Data Products Score: 64.6625 <br>Data Infrastructure Score: 55 <br>Population: Under 1M","Country: Suriname <br>Data Products Score: 62.6625 <br>Data Infrastructure Score: 55 <br>Population: Under 1M","Country: St. Vincent and the Grenadines <br>Data Products Score: 56.49375 <br>Data Infrastructure Score: 40 <br>Population: Under 1M","Country: Grenada <br>Data Products Score: 59.1125 <br>Data Infrastructure Score: 40 <br>Population: Under 1M","Country: Dominica <br>Data Products Score: 54.0625 <br>Data Infrastructure Score: 30 <br>Population: Under 1M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(Under 1M,Upper middle income)","legendgroup":"(Under 1M,Upper middle income)","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[72.662500000000009],"y":[60],"text":"Country: Maldives <br>Data Products Score: 72.6625 <br>Data Infrastructure Score: 60 <br>Population: Under 1M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(Under 1M,Upper middle income)","legendgroup":"(Under 1M,Upper middle income)","showlegend":false,"xaxis":"x3","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[69.581250000000011,70.0625,69.90625,63.450000000000003,56.20624999999999],"y":[60,35,35,45,25],"text":["Country: Samoa <br>Data Products Score: 69.58125 <br>Data Infrastructure Score: 60 <br>Population: Under 1M","Country: Vanuatu <br>Data Products Score: 70.0625 <br>Data Infrastructure Score: 35 <br>Population: Under 1M","Country: Kiribati <br>Data Products Score: 69.90625 <br>Data Infrastructure Score: 35 <br>Population: Under 1M","Country: Solomon Islands <br>Data Products Score: 63.45 <br>Data Infrastructure Score: 45 <br>Population: Under 1M","Country: Micronesia, Fed. Sts. <br>Data Products Score: 56.20625 <br>Data Infrastructure Score: 25 <br>Population: Under 1M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(Under 1M,Lower middle income)","legendgroup":"(Under 1M,Lower middle income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[73.518750000000011],"y":[45],"text":"Country: Bhutan <br>Data Products Score: 73.51875 <br>Data Infrastructure Score: 45 <br>Population: Under 1M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(Under 1M,Lower middle income)","legendgroup":"(Under 1M,Lower middle income)","showlegend":false,"xaxis":"x3","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[67.5625,63.606250000000003,71.275000000000006],"y":[55.000000000000007,35,40],"text":["Country: Cabo Verde <br>Data Products Score: 67.5625 <br>Data Infrastructure Score: 55 <br>Population: Under 1M","Country: Sao Tome and Principe <br>Data Products Score: 63.60625 <br>Data Infrastructure Score: 35 <br>Population: Under 1M","Country: Comoros <br>Data Products Score: 71.275 <br>Data Infrastructure Score: 40 <br>Population: Under 1M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(Under 1M,Lower middle income)","legendgroup":"(Under 1M,Lower middle income)","showlegend":false,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[83.912500000000009,85.481250000000003,85.681249999999991,69.662500000000009],"y":[95,100,100,80],"text":["Country: Korea, Rep. <br>Data Products Score: 83.9125 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: New Zealand <br>Data Products Score: 85.48125 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Australia <br>Data Products Score: 85.68125 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Singapore <br>Data Products Score: 69.6625 <br>Data Infrastructure Score: 80 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(50M - 100M,High income)","legendgroup":"(50M - 100M,High income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[90.712500000000006,90.96875,84.543749999999989,90.575000000000003,92.625,91.087500000000006,91.34375,91.75,93.268749999999997,86.700000000000003,91.231250000000003,85.40625,92.75,85.8125,91.456249999999997,94.3125,84.618749999999991,85.03125,83.46875,86.606249999999989,88.887500000000003,84.25,83.731250000000017,89.962500000000006,83.837500000000006,80.518750000000011,79.293750000000003,75.924999999999997],"y":[100,100,100,100,100,100,100,100,100,100,100,100,100,95,100,100,100,95,100,100,90,100,100,90,85,90,95,95],"text":["Country: Denmark <br>Data Products Score: 90.7125 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Finland <br>Data Products Score: 90.96875 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Poland <br>Data Products Score: 84.54375 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Sweden <br>Data Products Score: 90.575 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Spain <br>Data Products Score: 92.625 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Netherlands <br>Data Products Score: 91.0875 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Slovenia <br>Data Products Score: 91.34375 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Portugal <br>Data Products Score: 91.75 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Italy <br>Data Products Score: 93.26875 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Norway <br>Data Products Score: 86.7 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: France <br>Data Products Score: 91.23125 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Estonia <br>Data Products Score: 85.40625 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Austria <br>Data Products Score: 92.75 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Germany <br>Data Products Score: 85.8125 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: Hungary <br>Data Products Score: 91.45625 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Lithuania <br>Data Products Score: 94.3125 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Latvia <br>Data Products Score: 84.61875 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Czechia <br>Data Products Score: 85.03125 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: Greece <br>Data Products Score: 83.46875 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Belgium <br>Data Products Score: 86.60625 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Switzerland <br>Data Products Score: 88.8875 <br>Data Infrastructure Score: 90 <br>Population: 50M - 100M","Country: Slovak Republic <br>Data Products Score: 84.25 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Ireland <br>Data Products Score: 83.73125 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: United Kingdom <br>Data Products Score: 89.9625 <br>Data Infrastructure Score: 90 <br>Population: 50M - 100M","Country: Romania <br>Data Products Score: 83.8375 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Bulgaria <br>Data Products Score: 80.51875 <br>Data Infrastructure Score: 90 <br>Population: 50M - 100M","Country: Cyprus <br>Data Products Score: 79.29375 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: Croatia <br>Data Products Score: 75.925 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(50M - 100M,High income)","legendgroup":"(50M - 100M,High income)","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[78.868750000000006,73.668750000000003,86.856250000000003,68.19374999999998],"y":[95,75,60,50],"text":["Country: Chile <br>Data Products Score: 78.86875 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: Uruguay <br>Data Products Score: 73.66875 <br>Data Infrastructure Score: 75 <br>Population: 50M - 100M","Country: Panama <br>Data Products Score: 86.85625 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Trinidad and Tobago <br>Data Products Score: 68.19375 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(50M - 100M,High income)","legendgroup":"(50M - 100M,High income)","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[70.893749999999997,75.224999999999994,71.149999999999991,66.206249999999983,67.431249999999991,60.424999999999997,58.112499999999997],"y":[100,95,85,65,60,50,40],"text":["Country: Israel <br>Data Products Score: 70.89375 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Saudi Arabia <br>Data Products Score: 75.225 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: United Arab Emirates <br>Data Products Score: 71.15 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Qatar <br>Data Products Score: 66.20625 <br>Data Infrastructure Score: 65 <br>Population: 50M - 100M","Country: Kuwait <br>Data Products Score: 67.43125 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Oman <br>Data Products Score: 60.425 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M","Country: Bahrain <br>Data Products Score: 58.1125 <br>Data Infrastructure Score: 40 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(50M - 100M,High income)","legendgroup":"(50M - 100M,High income)","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[84.749999999999986],"y":[100],"text":"Country: Canada <br>Data Products Score: 84.75 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(50M - 100M,High income)","legendgroup":"(50M - 100M,High income)","showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[83.568750000000009,88.399999999999991,85.38124999999998],"y":[65,85,75],"text":["Country: Mongolia <br>Data Products Score: 83.56875 <br>Data Infrastructure Score: 65 <br>Population: 50M - 100M","Country: Thailand <br>Data Products Score: 88.4 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Malaysia <br>Data Products Score: 85.38125 <br>Data Infrastructure Score: 75 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(50M - 100M,Upper middle income)","legendgroup":"(50M - 100M,Upper middle income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[84.587500000000006,90.668750000000003,76.975000000000009,81.018750000000011,84.143749999999997,85.181249999999991,88.993750000000006,85.043749999999989,85.150000000000006,84.506250000000009,75.556250000000006,73.556250000000006,66.4375],"y":[90,100,90,80,95,90,85,65,95,95,75,80,15],"text":["Country: Georgia <br>Data Products Score: 84.5875 <br>Data Infrastructure Score: 90 <br>Population: 50M - 100M","Country: Turkiye <br>Data Products Score: 90.66875 <br>Data Infrastructure Score: 100 <br>Population: 50M - 100M","Country: Moldova <br>Data Products Score: 76.975 <br>Data Infrastructure Score: 90 <br>Population: 50M - 100M","Country: North Macedonia <br>Data Products Score: 81.01875 <br>Data Infrastructure Score: 80 <br>Population: 50M - 100M","Country: Albania <br>Data Products Score: 84.14375 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: Armenia <br>Data Products Score: 85.18125 <br>Data Infrastructure Score: 90 <br>Population: 50M - 100M","Country: Serbia <br>Data Products Score: 88.99375 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Kazakhstan <br>Data Products Score: 85.04375 <br>Data Infrastructure Score: 65 <br>Population: 50M - 100M","Country: Ukraine <br>Data Products Score: 85.15 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: Belarus <br>Data Products Score: 84.50625 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: Bosnia and Herzegovina <br>Data Products Score: 75.55625 <br>Data Infrastructure Score: 75 <br>Population: 50M - 100M","Country: Azerbaijan <br>Data Products Score: 73.55625 <br>Data Infrastructure Score: 80 <br>Population: 50M - 100M","Country: Turkmenistan <br>Data Products Score: 66.4375 <br>Data Infrastructure Score: 15 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(50M - 100M,Upper middle income)","legendgroup":"(50M - 100M,Upper middle income)","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[90.693749999999994,88.187500000000014,86.918750000000003,85.606249999999989,89.8125,83.700000000000003,81.1875,79.231250000000003,79.825000000000003,76.643750000000011],"y":[85,85,70,60,55.000000000000007,75,70,80,75,45],"text":["Country: Costa Rica <br>Data Products Score: 90.69375 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Colombia <br>Data Products Score: 88.1875 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Argentina <br>Data Products Score: 86.91875 <br>Data Infrastructure Score: 70 <br>Population: 50M - 100M","Country: Ecuador <br>Data Products Score: 85.60625 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Peru <br>Data Products Score: 89.8125 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Paraguay <br>Data Products Score: 83.7 <br>Data Infrastructure Score: 75 <br>Population: 50M - 100M","Country: El Salvador <br>Data Products Score: 81.1875 <br>Data Infrastructure Score: 70 <br>Population: 50M - 100M","Country: Guatemala <br>Data Products Score: 79.23125 <br>Data Infrastructure Score: 80 <br>Population: 50M - 100M","Country: Dominican Republic <br>Data Products Score: 79.825 <br>Data Infrastructure Score: 75 <br>Population: 50M - 100M","Country: Jamaica <br>Data Products Score: 76.64375 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(50M - 100M,Upper middle income)","legendgroup":"(50M - 100M,Upper middle income)","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[70.512500000000017,75.506250000000009,70.337500000000006,53.737499999999997],"y":[45,50,40,25],"text":["Country: Iran, Islamic Rep. <br>Data Products Score: 70.5125 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Algeria <br>Data Products Score: 75.50625 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M","Country: Iraq <br>Data Products Score: 70.3375 <br>Data Infrastructure Score: 40 <br>Population: 50M - 100M","Country: Libya <br>Data Products Score: 53.7375 <br>Data Infrastructure Score: 25 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(50M - 100M,Upper middle income)","legendgroup":"(50M - 100M,Upper middle income)","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[83.137500000000003,78.131250000000009,74.818749999999994,71.78125,66.087500000000006,60.631250000000001],"y":[85,75,60,60,45,35],"text":["Country: South Africa <br>Data Products Score: 83.1375 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Mauritius <br>Data Products Score: 78.13125 <br>Data Infrastructure Score: 75 <br>Population: 50M - 100M","Country: Botswana <br>Data Products Score: 74.81875 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Namibia <br>Data Products Score: 71.78125 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Gabon <br>Data Products Score: 66.0875 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Equatorial Guinea <br>Data Products Score: 60.63125 <br>Data Infrastructure Score: 35 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(50M - 100M,Upper middle income)","legendgroup":"(50M - 100M,Upper middle income)","showlegend":false,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[89.4375,77.65625,82.02500000000002,64.587499999999991,69.543749999999989,68.606250000000003],"y":[50,60,55.000000000000007,65,35,30],"text":["Country: Viet Nam <br>Data Products Score: 89.4375 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M","Country: Myanmar <br>Data Products Score: 77.65625 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Cambodia <br>Data Products Score: 82.025 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Timor-Leste <br>Data Products Score: 64.5875 <br>Data Infrastructure Score: 65 <br>Population: 50M - 100M","Country: Lao PDR <br>Data Products Score: 69.54375 <br>Data Infrastructure Score: 35 <br>Population: 50M - 100M","Country: Papua New Guinea <br>Data Products Score: 68.60625 <br>Data Infrastructure Score: 30 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(50M - 100M,Lower middle income)","legendgroup":"(50M - 100M,Lower middle income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[85.043749999999989,84.587500000000006,72.575000000000003],"y":[95,85,30],"text":["Country: Uzbekistan <br>Data Products Score: 85.04375 <br>Data Infrastructure Score: 95 <br>Population: 50M - 100M","Country: Kyrgyz Republic <br>Data Products Score: 84.5875 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Tajikistan <br>Data Products Score: 72.575 <br>Data Infrastructure Score: 30 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(50M - 100M,Lower middle income)","legendgroup":"(50M - 100M,Lower middle income)","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[81.175000000000011,84.462499999999991,66.193750000000009,61.693750000000001],"y":[55.000000000000007,50,55.000000000000007,50],"text":["Country: Bolivia <br>Data Products Score: 81.175 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Honduras <br>Data Products Score: 84.4625 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M","Country: Nicaragua <br>Data Products Score: 66.19375 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Haiti <br>Data Products Score: 61.69375 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(50M - 100M,Lower middle income)","legendgroup":"(50M - 100M,Lower middle income)","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[66.662500000000009,81.618750000000006,76.131250000000009,81.687499999999986,78.081249999999997,61.200000000000003],"y":[85,70,60,55.000000000000007,40,55.000000000000007],"text":["Country: West Bank and Gaza <br>Data Products Score: 66.6625 <br>Data Infrastructure Score: 85 <br>Population: 50M - 100M","Country: Jordan <br>Data Products Score: 81.61875 <br>Data Infrastructure Score: 70 <br>Population: 50M - 100M","Country: Tunisia <br>Data Products Score: 76.13125 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Morocco <br>Data Products Score: 81.6875 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Lebanon <br>Data Products Score: 78.08125 <br>Data Infrastructure Score: 40 <br>Population: 50M - 100M","Country: Djibouti <br>Data Products Score: 61.2 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(50M - 100M,Lower middle income)","legendgroup":"(50M - 100M,Lower middle income)","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[79.34375,80.893749999999997],"y":[60,55.000000000000007],"text":["Country: Sri Lanka <br>Data Products Score: 79.34375 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Nepal <br>Data Products Score: 80.89375 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(50M - 100M,Lower middle income)","legendgroup":"(50M - 100M,Lower middle income)","showlegend":false,"xaxis":"x3","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[78.368750000000006,84.381250000000009,83.356250000000003,83.387500000000003,78.631249999999994,82.249999999999986,75.325000000000003,79.037500000000009,72.068750000000009,72.887500000000003,77.662499999999994,76.937499999999986,69.731250000000003,71.537500000000009,64.425000000000011],"y":[75,70,55.000000000000007,60,65,60,65,50,60,50,60,55.000000000000007,60,55.000000000000007,50],"text":["Country: Senegal <br>Data Products Score: 78.36875 <br>Data Infrastructure Score: 75 <br>Population: 50M - 100M","Country: Kenya <br>Data Products Score: 84.38125 <br>Data Infrastructure Score: 70 <br>Population: 50M - 100M","Country: Tanzania <br>Data Products Score: 83.35625 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Zimbabwe <br>Data Products Score: 83.3875 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Cote d'Ivoire <br>Data Products Score: 78.63125 <br>Data Infrastructure Score: 65 <br>Population: 50M - 100M","Country: Ghana <br>Data Products Score: 82.25 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Benin <br>Data Products Score: 75.325 <br>Data Infrastructure Score: 65 <br>Population: 50M - 100M","Country: Zambia <br>Data Products Score: 79.0375 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M","Country: Mauritania <br>Data Products Score: 72.06875 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Angola <br>Data Products Score: 72.8875 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M","Country: Eswatini <br>Data Products Score: 77.6625 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Cameroon <br>Data Products Score: 76.9375 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Lesotho <br>Data Products Score: 69.73125 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Guinea <br>Data Products Score: 71.5375 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Congo, Rep. <br>Data Products Score: 64.425 <br>Data Infrastructure Score: 50 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(50M - 100M,Lower middle income)","legendgroup":"(50M - 100M,Lower middle income)","showlegend":false,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[57.90625,68.506250000000009],"y":[40,25],"text":["Country: Syrian Arab Republic <br>Data Products Score: 57.90625 <br>Data Infrastructure Score: 40 <br>Population: 50M - 100M","Country: Yemen, Rep. <br>Data Products Score: 68.50625 <br>Data Infrastructure Score: 25 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(199,124,255,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"(50M - 100M,Low income)","legendgroup":"(50M - 100M,Low income)","showlegend":true,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[76.356250000000003],"y":[55.000000000000007],"text":"Country: Afghanistan <br>Data Products Score: 76.35625 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(199,124,255,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"(50M - 100M,Low income)","legendgroup":"(50M - 100M,Low income)","showlegend":false,"xaxis":"x3","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[80.387500000000003,77.637499999999989,78.912499999999994,76.306249999999991,86.368750000000006,77.512500000000003,81.774999999999991,75.781250000000014,69.274999999999991,71.375,71.950000000000003,72.037500000000023,73.424999999999983,69.52500000000002,74.162499999999994,68.706250000000011,61.23749999999999,67,57.306250000000006,51.450000000000003],"y":[80,70,75,65,55.000000000000007,60,45,60,45,45,60,45,45,45,45,45,40,30,30,10],"text":["Country: Burkina Faso <br>Data Products Score: 80.3875 <br>Data Infrastructure Score: 80 <br>Population: 50M - 100M","Country: Rwanda <br>Data Products Score: 77.6375 <br>Data Infrastructure Score: 70 <br>Population: 50M - 100M","Country: Uganda <br>Data Products Score: 78.9125 <br>Data Infrastructure Score: 75 <br>Population: 50M - 100M","Country: Niger <br>Data Products Score: 76.30625 <br>Data Infrastructure Score: 65 <br>Population: 50M - 100M","Country: Gambia, The <br>Data Products Score: 86.36875 <br>Data Infrastructure Score: 55 <br>Population: 50M - 100M","Country: Togo <br>Data Products Score: 77.5125 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Malawi <br>Data Products Score: 81.775 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Liberia <br>Data Products Score: 75.78125 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Mali <br>Data Products Score: 69.275 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Sierra Leone <br>Data Products Score: 71.375 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Mozambique <br>Data Products Score: 71.95 <br>Data Infrastructure Score: 60 <br>Population: 50M - 100M","Country: Chad <br>Data Products Score: 72.0375 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Madagascar <br>Data Products Score: 73.425 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Somalia <br>Data Products Score: 69.525 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Burundi <br>Data Products Score: 74.1625 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Central African Republic <br>Data Products Score: 68.70625 <br>Data Infrastructure Score: 45 <br>Population: 50M - 100M","Country: Guinea-Bissau <br>Data Products Score: 61.2375 <br>Data Infrastructure Score: 40 <br>Population: 50M - 100M","Country: Sudan <br>Data Products Score: 67 <br>Data Infrastructure Score: 30 <br>Population: 50M - 100M","Country: South Sudan <br>Data Products Score: 57.30625 <br>Data Infrastructure Score: 30 <br>Population: 50M - 100M","Country: Eritrea <br>Data Products Score: 51.45 <br>Data Infrastructure Score: 10 <br>Population: 50M - 100M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(199,124,255,1)","opacity":0.5,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"(50M - 100M,Low income)","legendgroup":"(50M - 100M,Low income)","showlegend":false,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[85.368749999999991],"y":[95],"text":"Country: Japan <br>Data Products Score: 85.36875 <br>Data Infrastructure Score: 95 <br>Population: 100M - 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(100M - 500M,High income)","legendgroup":"(100M - 500M,High income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[79.087500000000006],"y":[90],"text":"Country: Russian Federation <br>Data Products Score: 79.0875 <br>Data Infrastructure Score: 90 <br>Population: 100M - 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(100M - 500M,High income)","legendgroup":"(100M - 500M,High income)","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[88.393750000000011],"y":[100],"text":"Country: United States <br>Data Products Score: 88.39375 <br>Data Infrastructure Score: 100 <br>Population: 100M - 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(100M - 500M,High income)","legendgroup":"(100M - 500M,High income)","showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[87],"y":[70],"text":"Country: Indonesia <br>Data Products Score: 87 <br>Data Infrastructure Score: 70 <br>Population: 100M - 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(100M - 500M,Upper middle income)","legendgroup":"(100M - 500M,Upper middle income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[92.724999999999994,77.287499999999994],"y":[85,70],"text":["Country: Mexico <br>Data Products Score: 92.725 <br>Data Infrastructure Score: 85 <br>Population: 100M - 500M","Country: Brazil <br>Data Products Score: 77.2875 <br>Data Infrastructure Score: 70 <br>Population: 100M - 500M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(100M - 500M,Upper middle income)","legendgroup":"(100M - 500M,Upper middle income)","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[85.243750000000006],"y":[65],"text":"Country: Philippines <br>Data Products Score: 85.24375 <br>Data Infrastructure Score: 65 <br>Population: 100M - 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(100M - 500M,Lower middle income)","legendgroup":"(100M - 500M,Lower middle income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[84.700000000000003],"y":[75],"text":"Country: Egypt, Arab Rep. <br>Data Products Score: 84.7 <br>Data Infrastructure Score: 75 <br>Population: 100M - 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(100M - 500M,Lower middle income)","legendgroup":"(100M - 500M,Lower middle income)","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[83.918750000000003,81.212500000000006],"y":[70,60],"text":["Country: Bangladesh <br>Data Products Score: 83.91875 <br>Data Infrastructure Score: 70 <br>Population: 100M - 500M","Country: Pakistan <br>Data Products Score: 81.2125 <br>Data Infrastructure Score: 60 <br>Population: 100M - 500M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(100M - 500M,Lower middle income)","legendgroup":"(100M - 500M,Lower middle income)","showlegend":false,"xaxis":"x3","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[75.543750000000003],"y":[50],"text":"Country: Nigeria <br>Data Products Score: 75.54375 <br>Data Infrastructure Score: 50 <br>Population: 100M - 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(100M - 500M,Lower middle income)","legendgroup":"(100M - 500M,Lower middle income)","showlegend":false,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[78.793749999999989,68.737500000000011],"y":[45,40],"text":["Country: Ethiopia <br>Data Products Score: 78.79375 <br>Data Infrastructure Score: 45 <br>Population: 100M - 500M","Country: Congo, Dem. Rep. <br>Data Products Score: 68.7375 <br>Data Infrastructure Score: 40 <br>Population: 100M - 500M"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(199,124,255,1)","opacity":0.5,"size":37.795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"(100M - 500M,Low income)","legendgroup":"(100M - 500M,Low income)","showlegend":true,"xaxis":"x","yaxis":"y3","hoverinfo":"text","frame":null},{"x":[78.743750000000006],"y":[60],"text":"Country: China <br>Data Products Score: 78.74375 <br>Data Infrastructure Score: 60 <br>Population: Over 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(124,174,0,1)","opacity":0.5,"size":68.031496062992133,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(Over 500M,Upper middle income)","legendgroup":"(Over 500M,Upper middle income)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[84.275000000000006],"y":[45],"text":"Country: India <br>Data Products Score: 84.275 <br>Data Infrastructure Score: 45 <br>Population: Over 500M","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.5,"size":68.031496062992133,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(Over 500M,Lower middle income)","legendgroup":"(Over 500M,Lower middle income)","showlegend":true,"xaxis":"x3","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":52.529680365296812,"r":7.3059360730593621,"b":37.260273972602747,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Global Data Infrastructure Score vs Data Products Score in 2023","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,0.32246140465318546],"automargin":true,"type":"linear","autorange":false,"range":[35.335312500000001,97.120937499999997],"tickmode":"array","ticktext":["40","60","80"],"tickvals":[40,60,80],"categoryorder":"array","categoryarray":["40","60","80"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0,"zeroline":false,"anchor":"y3","title":"","hoverformat":".2f"},"annotations":[{"text":"Data Products Score","x":0.5,"y":0,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"top","annotationType":"axis","yshift":-21.917808219178081},{"text":"Data Infrastructure Score","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-27.762557077625573},{"text":"East Asia & Pacific","x":0.16123070232659273,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Europe & Central Asia","x":0.5,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Latin America & Caribbean","x":0.83876929767340724,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Middle East & North Africa","x":0.16123070232659273,"y":0.62709284627092854,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"North America","x":0.5,"y":0.62709284627092854,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"South Asia","x":0.83876929767340724,"y":0.62709284627092854,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Sub-Saharan Africa","x":0.16123070232659273,"y":0.29375951293759517,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"yaxis":{"domain":[0.70624048706240494,1],"automargin":true,"type":"linear","autorange":false,"range":[5.5,104.5],"tickmode":"array","ticktext":["25","50","75","100"],"tickvals":[25,50,75,100],"categoryorder":"array","categoryarray":["25","50","75","100"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":0.32246140465318546,"y0":0.70624048706240494,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":0.32246140465318546,"y0":0,"y1":23.37899543378996,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0.34420526201348117,"x1":0.65579473798651877,"y0":0.70624048706240494,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0.34420526201348117,"x1":0.65579473798651877,"y0":0,"y1":23.37899543378996,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0.67753859534681449,"x1":1,"y0":0.70624048706240494,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0.67753859534681449,"x1":1,"y0":0,"y1":23.37899543378996,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":0.32246140465318546,"y0":0.37290715372907157,"y1":0.62709284627092854},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":0.32246140465318546,"y0":0,"y1":23.37899543378996,"yanchor":0.62709284627092854,"ysizemode":"pixel"},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0.34420526201348117,"x1":0.65579473798651877,"y0":0.37290715372907157,"y1":0.62709284627092854},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0.34420526201348117,"x1":0.65579473798651877,"y0":0,"y1":23.37899543378996,"yanchor":0.62709284627092854,"ysizemode":"pixel"},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0.67753859534681449,"x1":1,"y0":0.37290715372907157,"y1":0.62709284627092854},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0.67753859534681449,"x1":1,"y0":0,"y1":23.37899543378996,"yanchor":0.62709284627092854,"ysizemode":"pixel"},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":0.32246140465318546,"y0":0,"y1":0.29375951293759517},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":0.32246140465318546,"y0":0,"y1":23.37899543378996,"yanchor":0.29375951293759517,"ysizemode":"pixel"}],"xaxis2":{"type":"linear","autorange":false,"range":[35.335312500000001,97.120937499999997],"tickmode":"array","ticktext":["40","60","80"],"tickvals":[40,60,80],"categoryorder":"array","categoryarray":["40","60","80"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.34420526201348117,0.65579473798651877],"gridcolor":"rgba(255,255,255,1)","gridwidth":0,"zeroline":false,"anchor":"y2","title":"","hoverformat":".2f"},"xaxis3":{"type":"linear","autorange":false,"range":[35.335312500000001,97.120937499999997],"tickmode":"array","ticktext":["40","60","80"],"tickvals":[40,60,80],"categoryorder":"array","categoryarray":["40","60","80"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.67753859534681449,1],"gridcolor":"rgba(255,255,255,1)","gridwidth":0,"zeroline":false,"anchor":"y2","title":"","hoverformat":".2f"},"yaxis2":{"type":"linear","autorange":false,"range":[5.5,104.5],"tickmode":"array","ticktext":["25","50","75","100"],"tickvals":[25,50,75,100],"categoryorder":"array","categoryarray":["25","50","75","100"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.37290715372907157,0.62709284627092854],"gridcolor":"rgba(255,255,255,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"yaxis3":{"type":"linear","autorange":false,"range":[5.5,104.5],"tickmode":"array","ticktext":["25","50","75","100"],"tickvals":[25,50,75,100],"categoryorder":"array","categoryarray":["25","50","75","100"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0,0.29375951293759517],"gridcolor":"rgba(255,255,255,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Population Size<br />Income","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"90745a0bfbd1":{"x":{},"y":{},"size":{},"colour":{},"text":{},"type":"scatter"}},"cur_data":"90745a0bfbd1","visdat":{"90745a0bfbd1":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveWidget</span>(GlobalData, <span class="fu">here</span>(<span class="st">"Tidy_Tuesday"</span>,<span class="st">"2025-11-25"</span>, <span class="st">"Output"</span>, <span class="st">"GlobalDataPlotly.html"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="what-we-learned-today" class="level1">
+<h1>What we learned today</h1>
+<p>This was the first time that I used a bubble plot and plotly. I converted my data to factors for population and income levels for better data visualization given the huge range in population size and categorical nature of income levels. For a bubble plot, the transparent color was necessary since countries with larger populations covered the data of countries with smaller populations. I have the two different plots shown here because plotly legends are very finicky - I had to convert population to factors, otherwise it did not appear in the legend. The plotly legend is messy and the legend can’t divide population size and income the way a ggplot legend can.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
