@@ -1,16 +1,19 @@
 ---
 title: "Tidy Tuesday 5"
 format: html
-runtime: shiny
-output: html_document
 toc: true
 author: "Ally Malilay"
 date: "2025-12-8"
 theme: united
 mainfont: "Arial, sans-serif"
 ---
- 
+```{r child = "snow.Rmd"}
+```
+![The Böögg in 2015.](https://i.cbc.ca/1.3032910.1429043680!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_1180/switzerland-culture.jpg?im=)
+
 # Load libraries and our data!
+Today, we're taking a look at data from Zurich's "Sechselaeuten" spring festival. The Böögg is a giant snowman whose head and body are filled with fireworks - Zurich's residents set the Böögg on fire and wait to see how long it takes for his head to explode. It is believed that a quick explosion promises a warm, sunny summer, while a drawn-out burning indicates a cold and rainy one. 
+
 ```{r}
 #| message: false
 #| warning: false
@@ -18,33 +21,84 @@ mainfont: "Arial, sans-serif"
 #Load libraries
 library(tidytuesdayR)
 library(tidyverse)
-library(shiny)
+library(plotly)
+library(htmlwidgets)
+library(here)
 
 sechselaeuten <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-02/sechselaeuten.csv')
 ```
 
-# Make a plot
-```{r echo = FALSE}
-# Select type of trend to plot
-selectInput("n_breaks", label = "Number of bins:",
-              choices = c(10, 20, 35, 50), selected = 20)
-
-sliderInput("bw_adjust", label = "Bandwidth adjustment:",
-              min = 0.2, max = 2, value = 1, step = 0.2)
-
+# Tidy up data
+We're going to drop our NAs and change the names of columns for more clarity.
+```{r}
+#clean data
+sechselaeuten_cleaned <- sechselaeuten %>%
+  drop_na(duration) %>% #drop the 2020 and 2024 due to no duration information
+  rename(Year = year, #change names of columns for more clarity
+         Time = duration,
+         MeanAirTemp = tre200m0,
+         TotalSunshine = sre000m0,
+         TotalPrecipitation = rre150m0)
 ```
 
-# Make them reactive
-```{r echo = FALSE}
-#| context: server
-renderPlot({
-  hist(faithful$eruptions, probability = TRUE,
-       breaks = as.numeric(input$n_breaks),
-       xlab = "Duration (minutes)",
-       main = "Geyser eruption duration")
 
-  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
-  lines(dens, col = "blue")
-})
+# Making our plot!
+Let's take a look at the average summer temperature and see if a quicker burning correlates with a warmer summer, more sunshine, and less precipitation.
+```{r}
+snowman <- ggplot(sechselaeuten_cleaned, 
+       aes(x = Time, y = MeanAirTemp,
+           color = MeanAirTemp,
+           text = paste("Year:", Year, #text for our interactive plot
+                        "<br>Total Sunshine:", TotalSunshine,
+                        "<br>Total Precipitation:", TotalPrecipitation))) +
+  scale_colour_gradientn(colours = c("navy", "blue", "dodgerblue", "skyblue")) + #winter color scheme for our points
+  geom_text(aes(label = "❄"), #the shape of our geometry = snowflakes!  
+            size = 4) +  
+  geom_point(color = "white", alpha = 0.2) + #give the snowflakes a white transparent base
+
+#the making of our snowman
+  
+  annotate("segment", #brown sticks for arms, layered first so snowman body is on top
+           x = 48.0, xend = 45.5, #start and ends of x
+           y = 21.15, yend = 20.75, #start an ends of y
+           color = "brown", linewidth = 1.25) +
+  annotate("segment", 
+           x = 52.0, xend = 54.5, 
+           y = 21.15, yend = 20.75, 
+           color = "brown", linewidth = 1.25) +
+  annotate("point", x = 50, y = 21.85, size = 10, color = "white") + #snowman head placement, size, and color
+  annotate("point", x = 50, y = 21, size = 13, color = "white") +  #snowman middle
+  annotate("point", x = 50, y = 20, size = 18, color = "white") +  #snowman base
+  annotate("point", x = 51, y = 21.95, size = 0.8, color = "black") + #snowman eye
+  annotate("point", x = 49.4, y = 21.95, size = 0.8, color = "black")  +  #snowman eye
+  annotate("point", x = 50, y = 21.75, shape = 17, size = 1, color = "orange") +
+  annotate("point", x = 49.15, y = 21.6, size = 0.4, color = "black") + #smile point
+  annotate("point", x = 49.75, y = 21.55, size = 0.4, color = "black") + #smile point 
+  annotate("point", x = 50.25, y = 21.55, size = 0.4, color = "black") + #smile point
+  annotate("point", x = 50.85, y = 21.6, size = 0.4, color = "black") + #smile point
+ 
+  
+  geom_hline(yintercept = 19, #line to indicate warmer summer temperature
+             linetype = "dashed", #dashed line    
+             color = "blue", #color choice            
+             linewidth = 0.7) + #line width
+  annotate("text", x = 60, y = 18.75, label = "19°C", #text below line     
+           color = "blue", size = 3, fontface = "bold") +
+  labs(title = "Can Zurich's exploding snowman predict the summer season?", #axes and titles
+       y = "Average Summer Temp (°C)",
+       x = "Burn Duration (min)",
+       color = "Average Summer Temp (°C)") +
+  ylim(15, 22) #chosen y limits
+
+#use plotly for an interactive graph
+THESNOWMAN <- ggplotly(snowman,
+         tooltip = c("text")) #text for interaction
+
+THESNOWMAN
+
+#save output
+saveWidget(THESNOWMAN, here("Tidy_Tuesday","2025-12-02", "Output", "OurSnowman.html"))
 ```
 
+# What we learned today
+Today we learned how to embed a Child Document](https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html) into a single final output rendered in a consistent environment. This allowe us to add snowflakes falling from the top of the document! We also used annotations to create the image of a snowman in the plot rather than use the magick package. This was the first time I customized the shape of a point using geom_text(). This is the most I've customized a markdown file and plot!
