@@ -101,4 +101,4 @@ saveWidget(THESNOWMAN, here("Tidy_Tuesday","2025-12-02", "Output", "OurSnowman.h
 ```
 
 # What we learned today
-Today we learned how to embed a Child Document](https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html) into a single final output rendered in a consistent environment. This allowe us to add snowflakes falling from the top of the document! We also used annotations to create the image of a snowman in the plot rather than use the magick package. This was the first time I customized the shape of a point using geom_text(). This is the most I've customized a markdown file and plot!
+Today we learned how to embed a [Child Document](https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html) into a single final output rendered in a consistent environment. This allowe us to add snowflakes falling from the top of the document! We also used annotations to create the image of a snowman in the plot rather than use the magick package. This was the first time I customized the shape of a point using geom_text(). This is the most I've customized a markdown file and plot!
